@@ -1,4 +1,79 @@
-/* You can add global styles to this file, and also import other style files */
+html,
+body {
+  height: 100%;
+}
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+.form_container{
+  height: 100%;
+  width: 100%;
+  padding: 30px 0 20px;
+}
+.form {
+  display: flex;
+  flex-wrap: wrap;
+  column-gap: 15px;
+  align-items: center;
+  justify-content: center;
+  border-radius: 10px;
+  border: 1px solid black;
+  height: -moz-fit-content;
+  height: -webkit-fit-content;
+  height: fit-content;
+  margin: auto;
+  padding: 20px 0;
+  width: clamp(250px, 90%, 1024px);
+  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+}
+
+  .form_field {
+    margin: 20px 0 5px;
+  width: 80%;
+  max-width: 300px;
+}
+
+.spacer {
+  flex: 1 1 auto;
+  margin-left: auto;
+}
+
+
+.title {
+  text-align: center;
+  margin-bottom: 20px;
+  width: 100%;
+}
+
+
+/* Delete */
+.btn {
+  background-color: indigo;
+  -moz-border-radius: 10px;
+  -ms-border-radius: 10px;
+  -o-border-radius: 10px;
+  -webkit-border-radius: 10px;
+  border-radius: 10px;
+  border: 1px solid black;
+  box-shadow: black 1px 1px 2px;
+  color: #ffffff;
+  cursor: pointer;
+  font-size: 12px;
+  font-weight: bold;
+  padding: 10px;
+  text-align: center;
+  text-shadow: rgba(0, 0, 0, 0.25) 0 3px 8px;
+}
+
+.button:active {
+  box-shadow: black 1px 1px 2px inset;
+}
 
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

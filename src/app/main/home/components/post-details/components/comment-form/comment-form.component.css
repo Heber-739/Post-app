@@ -1,0 +1,17 @@
+.comment_form{
+  width: 100%;
+  min-height: 150px ;
+}
+.edit_form_container{
+  position: fixed;
+  display: grid;
+  place-items: center;
+  width: clamp(300px, 50%, 768px);
+}
+
+.text_area{
+  width: 100%;
+}
+input.mat-input-element{
+ min-height: 150px;
+}

@@ -1,0 +1,28 @@
+<section class="form_container">
+  <form class="form" onsubmit="" [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+    <h1 class="title">Iniciar sesion</h1>
+
+    <mat-form-field appearance="outline" class="form_field">
+      <mat-label>email</mat-label>
+      <input type="text" placeholder="email" matInput formControlName="mail" >
+      <mat-error>Email obligatorio</mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="form_field">
+      <mat-label>Contraseña</mat-label>
+      <input matInput [type]="hide ? 'password' : 'text'" formControlName="password">
+      <mat-error>Contraseña obligatoria</mat-error>
+      <button mat-icon-button matSuffix (click)="hide = !hide" [attr.aria-label]="'Hide password'" [attr.aria-pressed]="hide">
+        <mat-icon>{{hide ? 'visibility_off' : 'visibility'}}</mat-icon>
+      </button>
+
+    </mat-form-field>
+    <br>
+    <button mat-raised-button color="primary" type="submit">Login</button>
+    </form>
+
+    <div class="container_btn_register">
+    <h3>¿Aún no tienes una cuenta?</h3>
+    <button mat-raised-button color="primary" routerLink="/login/user-form">Registrarse</button>
+  </div>
+</section>

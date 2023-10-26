@@ -1,0 +1,38 @@
+.mat-elevation-z8{
+  width: 100%;
+}
+.table{
+  margin: 0 auto;
+  max-width: 1024px;
+  width: 100%;
+}
+
+.titles{
+  background-color: indigo;
+  color: white;
+  font-size: 1.2em;
+}
+.body{
+max-width: clamp(200px,70vw,900px);
+padding: 0 10px;
+}
+.body,.id{
+  overflow: hidden;
+text-align: center;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
+.id,.id_title{
+max-width: 8vw;
+text-align: center;
+}
+.link{
+padding: 0;
+text-align: center;
+width: 22vw;
+}
+
+.paginator{
+  margin: 0 auto ;
+  width: clamp(220px,95dvw,700px);
+}

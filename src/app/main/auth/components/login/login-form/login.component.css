@@ -1,0 +1,12 @@
+.form{
+  flex-direction: column;
+  margin-top: 30px;
+  width: clamp(250px, 90%, 420px);
+}
+.form_field{
+  width: 95%;
+}
+.container_btn_register{
+  margin: 70px auto 0;
+  text-align: center;
+}

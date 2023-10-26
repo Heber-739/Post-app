@@ -1,0 +1,25 @@
+<spinner *ngIf="isLoading"></spinner>
+
+<nav>
+  <mat-toolbar color="primary">
+   <ng-container *ngIf="photo">
+    <img [src]="photo ? photo : 'assets/images/profileBlank.png'" routerLink="/home/user" class="photo">
+    <button mat-button [matMenuTriggerFor]="user"> {{userName}} </button>
+<mat-menu #user="matMenu" routerLink="/home">
+  <a mat-button routerLink="/home/user">Ver usuario</a>
+</mat-menu>
+   </ng-container>
+<span class="spacer"></span>
+
+<ol class="breadcrumb">
+  <li *ngFor="let breadcrumb of breadcrumbs" class="item">
+      {{ breadcrumb }}
+  </li>
+</ol>
+
+    <span class="spacer"></span>
+
+    <button mat-button (click)="logout()" *ngIf="userName" >Cerrar sesion</button>
+    <button mat-button routerLink="login" *ngIf="!userName" > Login </button>
+  </mat-toolbar>
+</nav>
