@@ -5,7 +5,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 
 import Swal from 'sweetalert2';
 
-import { Auth, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
+import { Auth, authState, browserSessionPersistence, createUserWithEmailAndPassword, setPersistence, signInWithEmailAndPassword, signOut } from '@angular/fire/auth';
 import { Firestore, collection, doc, updateDoc, DocumentReference, setDoc, getDoc } from '@angular/fire/firestore';
 
 import { LoginUser } from '../interfaces/loginUser.interface';
@@ -59,6 +59,7 @@ export class AuthService {
         .then((res)=>this.token = res.token)
         this.fireAlert('Inicio de sesion exitoso!');
         this.getFireUser();
+
         this.router.navigate(['/home']);
       });
   }

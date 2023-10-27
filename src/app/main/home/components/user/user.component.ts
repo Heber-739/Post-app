@@ -1,5 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { LngLat } from 'mapbox-gl';
 import { Subscription, debounceTime, distinctUntilChanged } from 'rxjs';
 import { FireUser } from 'src/app/interfaces/user.interface';
 import { AuthService } from 'src/app/services/auth.service';
@@ -84,14 +85,20 @@ export class UserComponent implements OnInit,OnDestroy {
     }))
   }
 
+  saveCoords(coords: LngLat){
+    console.log(coords);
+  }
+
   onSubmit() {
     const addressGroup = this.userForm.get('address') as FormGroup;
     if (this.userForm.invalid || addressGroup.invalid) {
       this.userForm.markAllAsTouched();
       return;
     }
+    console.log(this.userForm.value)
 
         this.auth.updateUser(this.user);
+        console.log(this.user)
         this.edit = false;
  }
 }

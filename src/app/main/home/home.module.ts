@@ -11,6 +11,8 @@ import { UserComponent } from './components/user/user.component';
 import { MaterialModule } from 'src/app/shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { SharedModule } from 'src/app/shared/shared.module';
+
 
 
 @NgModule({
@@ -28,6 +30,7 @@ import { RouterModule } from '@angular/router';
     MaterialModule,
     ReactiveFormsModule,
     RouterModule,
+    SharedModule
   ]
 })
 export class HomeModule { }

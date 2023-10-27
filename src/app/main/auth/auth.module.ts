@@ -16,10 +16,10 @@ import { UserFormComponent } from './components/user/user-form/user-form.compone
   ],
   imports: [
     CommonModule,
+    AuthRoutingModule,
     MaterialModule,
     ReactiveFormsModule,
     RouterModule,
-    AuthRoutingModule
   ]
 })
 export class AuthModule { }

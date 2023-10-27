@@ -1,3 +1,5 @@
+import { LngLat } from "mapbox-gl";
+
 export interface FireUser {
   uid:      string;
   name:     string;
@@ -8,6 +10,7 @@ export interface FireUser {
   phone:    string;
   birthday: Date;
   role:     string[];
+  coords?:  LngLat;
 }
 
 export interface Address {
