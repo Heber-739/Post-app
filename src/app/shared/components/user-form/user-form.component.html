@@ -1,6 +1,6 @@
-<section class="form_container">
+
+
   <form class="form" [formGroup]="userForm" (ngSubmit)="onSubmit()">
-    <h1 class="title"> Registro de nuevo usuario</h1>
 
     <mat-form-field appearance="outline" class="form_field" hintLabel="De 5 a 15 caracteres">
       <mat-label>Nombre</mat-label>
@@ -25,7 +25,7 @@
         <mat-hint align="end">{{email.value.length}}/50</mat-hint>
       </mat-form-field>
 
-
+<ng-container *ngIf="!user">
       <mat-form-field appearance="outline" class="form_field" hintLabel="De 8 a 30 caracteres">
         <mat-label>Password</mat-label>
         <input formControlName="password" matInput #password maxlength="30" placeholder="password" [type]="hide ? 'password' : 'text'">
@@ -34,6 +34,7 @@
         </button>
         <mat-hint align="end">{{password.value.length}}/30</mat-hint>
       </mat-form-field>
+      </ng-container>
 
   <mat-form-field appearance="outline" class="form_field" hintLabel="Max 15 digitos">
     <mat-label>Teléfono</mat-label>
@@ -77,10 +78,20 @@
 
   </ng-container>
   <br>
+
+  <app-map
+  *ngIf="coords"
+  class=" editMap "
+  [lngLat]="coords"
+  [editMode]="true"
+  (emitCoords)="saveCoords($event)"
+  ></app-map>
+
+
+
   <div class="separator">
     <button mat-raised-button color="primary" type="submit">Guardar</button>
+    <button *ngIf="user" mat-button (click)="cancel()" >Cancelar</button>
   </div>
 
   </form>
-</section>
-

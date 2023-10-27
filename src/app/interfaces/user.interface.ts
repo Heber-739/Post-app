@@ -10,7 +10,7 @@ export interface FireUser {
   phone:    string;
   birthday: Date;
   role:     string[];
-  coords?:  LngLat;
+  coords:   [number,number];
 }
 
 export interface Address {

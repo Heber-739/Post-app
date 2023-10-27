@@ -1,27 +1,32 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { NavbarComponent } from './components/navbar/navbar.component';
-import { SpinnerComponent } from './components/spinner/spinner.component';
-import { MaterialModule } from './material/material.module';
+import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
-import { MapComponent } from './components/map/map.component';
-import { environment } from 'src/environments/environment';
 
+import { MaterialModule } from './material/material.module';
 import * as mapboxgl from 'mapbox-gl';
 (mapboxgl as any).accessToken = environment.mapbox_key;
+
+import { MapComponent } from './components/map/map.component';
+import { SpinnerComponent } from './components/spinner/spinner.component';
+import { NavbarComponent } from './components/navbar/navbar.component';
+import { UserFormComponent } from './components/user-form/user-form.component';
+import { environment } from 'src/environments/environment';
 
 
 @NgModule({
   declarations: [
     NavbarComponent,
     SpinnerComponent,
-    MapComponent
+    MapComponent,
+    UserFormComponent,
   ],
   imports: [
     CommonModule,
     MaterialModule,
-    RouterModule
+    ReactiveFormsModule,
+    RouterModule,
   ],
-  exports:[NavbarComponent,MapComponent]
+  exports:[NavbarComponent,MapComponent,UserFormComponent]
 })
 export class SharedModule { }

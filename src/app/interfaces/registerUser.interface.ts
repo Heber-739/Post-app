@@ -1,3 +1,5 @@
+import { LngLat } from "mapbox-gl";
+
 export interface RegisterUser {
   name:     string;
   username: string;
@@ -7,6 +9,7 @@ export interface RegisterUser {
   address:  Address;
   phone:    string;
   birthday: Date;
+  coords:   [number,number];
 }
 
 export interface Address {

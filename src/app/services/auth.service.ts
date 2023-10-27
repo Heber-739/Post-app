@@ -54,13 +54,15 @@ export class AuthService {
       .then((res) => {
         console.log(res)
         console.log(this.auth.currentUser)
-
-        res.user?.getIdTokenResult()
-        .then((res)=>this.token = res.token)
-        this.fireAlert('Inicio de sesion exitoso!');
+        res.user.getIdTokenResult()
+        .then((res)=>{
+          console.log(res)
+          this.token = res.token
+          this.fireAlert('Inicio de sesion exitoso!');
         this.getFireUser();
 
         this.router.navigate(['/home']);
+        })
       });
   }
 
@@ -111,8 +113,7 @@ export class AuthService {
   public async updateUser(newUser:FireUser) {
     const uid = this.auth.currentUser?.uid
     const user = doc(this.fire,`users/${uid}`) as DocumentReference<FireUser>;
-    updateDoc(user,newUser).then((res)=>{
-      console.log(res)
+    updateDoc(user,newUser).then(()=>{
       this.getFireUser()
     })
   }
@@ -126,6 +127,7 @@ export class AuthService {
       this.fireAlert('Sesión cerrada correctamente');
       this.router.navigate(['/login'])
       this.token = null;
+      this.fireUser.next({} as FireUser);
     });
   }
 }

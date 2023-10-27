@@ -23,9 +23,9 @@ export class MapComponent implements AfterViewInit{
 
 
   @ViewChild('map') divMap?: ElementRef;
-  @Input() lngLat:[number,number] = [0,0]
+  @Input() lngLat:[number,number] = [-12,-54];
   @Input() editMode:boolean = false;
-  @Output() emitCoords = new EventEmitter<LngLat>();
+  @Output() emitCoords = new EventEmitter<[number,number]>();
 
   constructor(private renderer:Renderer2){}
 
@@ -50,7 +50,8 @@ export class MapComponent implements AfterViewInit{
       this.getUbication()
     }
     this.renderer.listen(this.divMap.nativeElement, 'mouseup',()=>{
-      this.emitCoords.emit(this.marker.getLngLat())
+      const coord = this.marker.getLngLat()
+      this.emitCoords.emit([coord.lng,coord.lat])
     })
     this.setUbication()
     this.marker.addTo(this.map)

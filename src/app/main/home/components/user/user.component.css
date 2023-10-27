@@ -10,7 +10,7 @@
 .details{
   width: 95%;
   display: flex;
-  margin: 20px auto;
+  margin: 20px auto 40px;
   justify-content: space-around;
 }
 .separator {
@@ -69,12 +69,6 @@
   margin-top: 20px;
 }
 
-.editMap{
-  width: 100%;
-  height: 400px;
-  margin: 10px auto;
-  padding: 10px;
-}
 .profileMap{
   margin: 10px 10px 0 auto;
   width: 300px;

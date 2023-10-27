@@ -12,7 +12,7 @@ import { AuthService } from 'src/app/services/auth.service';
 export class NavbarComponent implements OnInit, OnDestroy {
   private replaceBC:{[key:string]:string} = {
     "login":"Login",
-    "user-form": "Nuevo registro",
+    "register": "Nuevo registro",
     "home":"Home",
     "posts":"Lista de posts",
     "user": "Usuario"

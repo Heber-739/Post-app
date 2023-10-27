@@ -6,13 +6,14 @@ import { MaterialModule } from 'src/app/shared/material/material.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
 import { LoginComponent } from './components/login/login-form/login.component';
-import { UserFormComponent } from './components/user/user-form/user-form.component';
+import { RegisterComponent } from './components/register/register.component';
+import { SharedModule } from 'src/app/shared/shared.module';
 
 
 @NgModule({
   declarations: [
     LoginComponent,
-    UserFormComponent
+    RegisterComponent,
   ],
   imports: [
     CommonModule,
@@ -20,6 +21,7 @@ import { UserFormComponent } from './components/user/user-form/user-form.compone
     MaterialModule,
     ReactiveFormsModule,
     RouterModule,
+    SharedModule
   ]
 })
 export class AuthModule { }
