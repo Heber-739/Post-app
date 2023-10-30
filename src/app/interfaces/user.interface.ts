@@ -1,5 +1,3 @@
-import { LngLat } from "mapbox-gl";
-
 export interface FireUser {
   uid:      string;
   name:     string;

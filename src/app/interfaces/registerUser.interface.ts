@@ -1,4 +1,3 @@
-import { LngLat } from "mapbox-gl";
 
 export interface RegisterUser {
   name:     string;
