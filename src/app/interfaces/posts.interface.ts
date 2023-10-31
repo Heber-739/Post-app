@@ -2,15 +2,20 @@ export interface Post {
   author:           Author;
   title:            string;
   description:      string;
-  state:            boolean;
+  state:            State;
   creationDate:     Date;
   modificationDate: Date;
   id:               string;
 }
 
 export interface Author {
-  name:   string;
-  userId: string;
-  role:   string;
+  uid:           string;
+  username:      string;
+  imageUrl:      string
+}
 
+export enum State {
+  PRIVATE = "PRIVATE",
+  PROTECTED = "PROTECTED",
+  PUBLIC = "PUBLIC"
 }

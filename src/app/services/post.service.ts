@@ -1,43 +1,62 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Observable, map, of, tap,  } from 'rxjs';
-import { ResponsePostList, Post } from '../interfaces/responsePostList.interface';
-import { ResponsePostByID } from '../interfaces/responsePostById.interface';
+
+import { Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
+
+import { Firestore, collection, addDoc, getDocs, doc, DocumentReference, updateDoc, deleteDoc } from '@angular/fire/firestore';
+
+import { environment } from 'src/environments/environment';
+import { FireUser } from '../interfaces/user.interface';
+import { Post } from '../interfaces/posts.interface';
 
 @Injectable({providedIn: 'root'})
 
 export class PostService {
-    private url:string = environment.urlBase + environment.posts;
     private urlPostById:string = environment.urlBase + environment.postById;
 
-    constructor(private http: HttpClient) {}
+    public user!:Observable<FireUser[]>
+    public posts!:Observable<Post[]>
 
-    public getPosts():Observable<Post[]>{
-      return of([]);
-    // const docRef = this.fire.collection<Post>('posts');
-    // return docRef.get().pipe(tap(console.log))
-    }
+
+    constructor(
+      private http: HttpClient,
+      private fire:Firestore) {}
+
 
     public getPostDetail(postId:string):Observable<Post>{
-        return this.http.get<ResponsePostByID>(`${this.urlPostById}/${postId}`).pipe(
-          map((res)=>res.data.post)
+        return this.http.get<Post>(`${this.urlPostById}/${postId}`).pipe(
+          map((res)=>res)
         )
     }
 
-    public addPost(post:Post,uid:string){
-      // this.fire
-      //   .collection('posts')
-      //   .doc(uid)
-      //   .set(post)
-      //   .then(() => {
-      //     Swal.fire({
-      //       title:'Post agregado',
-      //       icon:'success',
-      //       timer:2000
-      //     })
-      //   });
+
+    public getPosts():Promise<Post[]>{
+      return new Promise(async (resolve)=>{
+        let posts:Post[] = []
+        const data = await getDocs(collection(this.fire,'posts'))
+        data.docs.forEach((s)=>posts.push(s.data() as Post))
+        console.log('posts: ',posts)
+         resolve(posts);
+      })
+    }
+
+    public addPost(post:Post){
+      const postRef = collection(this.fire,'posts')
+      addDoc(postRef,post).then((res)=>{
+        post['id']=res.id;
+        this.updatePost(post)
+      }).catch((err)=>console.log(err))
+    }
+
+    public updatePost(post:Post){
+      const docPost = doc(this.fire,`posts/${post.id}`) as DocumentReference<Post>;
+      updateDoc(docPost,post)
+    }
+
+    public deletePost(post:Post){
+      const placeDocRef = doc(this.fire, `posts/${post.id}`);
+    return deleteDoc(placeDocRef)
     }
 
 }
