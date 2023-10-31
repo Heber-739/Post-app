@@ -1,4 +1,4 @@
-import { FireUser } from 'src/app/interfaces/user.interface';
+import { FireUser, Role } from 'src/app/interfaces/user.interface';
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatTableDataSource } from '@angular/material/table';
@@ -16,11 +16,12 @@ import { Post, State } from 'src/app/interfaces/posts.interface';
 export class PostListHomeComponent implements OnInit {
   public titles:string[]=['id','description','Actions'];
   newPost:boolean = false;
-  private user!:FireUser;
+  user!:FireUser;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
-
   public dataSource!:MatTableDataSource<Post>;
+  private posts:Post[] = []
+  private isAdmin = false;
 
   private subscriptions:Subscription[]=[]
 
@@ -31,20 +32,26 @@ export class PostListHomeComponent implements OnInit {
 
   ngOnInit(): void {
     this.getUser()
-   this.getPosts()
+    this.getPosts()
   }
 
   private getUser(){
     this.subscriptions.push(
-  this.auth.getUser().subscribe(res => this.user = res))
+  this.auth.getUser().subscribe(res => {
+    this.user = res
+    this.isAdmin = res.role.includes(Role.ADMIN)
+  }))
   }
 
   private getPosts():void{
-    this.postService.getPosts().then((posts)=> {
-      this.dataSource = new MatTableDataSource<Post>(posts),
-    this.dataSource!.paginator = this.paginator
+    this.postService.getPosts(this.user.uid,this.isAdmin).then((posts)=> {
+      this.posts = posts;
+      this.setPaginator(posts);
     })
-
+  }
+  private setPaginator(posts:Post[]){
+    this.dataSource = new MatTableDataSource<Post>(posts),
+    this.dataSource!.paginator = this.paginator
   }
 
   createPost(post:any){
@@ -55,6 +62,18 @@ export class PostListHomeComponent implements OnInit {
         ...post
       }
       this.postService.addPost(newPost)
+  }
+
+  canEdit(id:string):boolean{
+    return  id === this.user.uid || this.isAdmin
+  }
+
+  changeVisibility(id:string, value:boolean){
+    const index = this.posts.findIndex((post)=>post.id == id);
+    const post = this.posts[index]
+    post.state = value? State.PUBLIC : State.PRIVATE
+    this.postService.updatePost(post)
+    this.setPaginator(this.posts)
   }
 
 }

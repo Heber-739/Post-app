@@ -8,15 +8,15 @@ import { Firestore, collection, addDoc, getDocs, doc, DocumentReference, updateD
 
 import { environment } from 'src/environments/environment';
 import { FireUser } from '../interfaces/user.interface';
-import { Post } from '../interfaces/posts.interface';
+import { Post, State } from '../interfaces/posts.interface';
 
 @Injectable({providedIn: 'root'})
 
 export class PostService {
     private urlPostById:string = environment.urlBase + environment.postById;
+    private userPosts:Post[] = []
+    private allPosts:Post[] | null = null;
 
-    public user!:Observable<FireUser[]>
-    public posts!:Observable<Post[]>
 
 
     constructor(
@@ -31,12 +31,25 @@ export class PostService {
     }
 
 
-    public getPosts():Promise<Post[]>{
+    public getPosts(uid:string,isAdmin:boolean):Promise<Post[]>{
       return new Promise(async (resolve)=>{
+        if(this.allPosts){
+          resolve(this.allPosts)
+        }
         let posts:Post[] = []
+        this.allPosts = [];
         const data = await getDocs(collection(this.fire,'posts'))
-        data.docs.forEach((s)=>posts.push(s.data() as Post))
-        console.log('posts: ',posts)
+        data.docs.forEach((dat)=>{
+          const post = dat.data() as Post;
+          if(post.author.uid === uid){
+              this.userPosts.push(post)
+              posts.push(post)
+              this.allPosts!.push(post)
+          }else if (post.state !== State.PRIVATE || isAdmin){
+              posts.push(post)
+              this.allPosts!.push(post)
+          }
+        })
          resolve(posts);
       })
     }
@@ -55,6 +68,9 @@ export class PostService {
     }
 
     public deletePost(post:Post){
+      Swal.fire({
+        /* agregar verificacion */
+      })
       const placeDocRef = doc(this.fire, `posts/${post.id}`);
     return deleteDoc(placeDocRef)
     }

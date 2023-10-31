@@ -12,7 +12,7 @@ import { Firestore, collection, doc, updateDoc, DocumentReference, setDoc, getDo
 import { LoginUser } from '../interfaces/loginUser.interface';
 import { RegisterUser } from '../interfaces/registerUser.interface';
 import { FireAuthResponse } from '../interfaces/fireLoginResponse.interface';
-import { FireUser } from '../interfaces/user.interface';
+import { FireUser, Role } from '../interfaces/user.interface';
 
 @Injectable({
   providedIn: 'root',
@@ -93,7 +93,7 @@ export class AuthService {
 
   private addFireUser(user: RegisterUser, uid: string) {
     const { password, ...others } = user;
-    const newuser: FireUser = { ...others, uid, role: ['USER'] };
+    const newuser: FireUser = { ...others, uid, role: [Role.USER] };
     const dataRef = collection(this.fire,`users`)
     const docRef = doc(dataRef,`${uid}`);
 

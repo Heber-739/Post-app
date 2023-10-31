@@ -7,7 +7,7 @@ export interface FireUser {
   address:  Address;
   phone:    string;
   birthday: Date;
-  role:     string[];
+  role:     Role[];
   coords:   [number,number];
 }
 
@@ -16,4 +16,9 @@ export interface Address {
   location: string;
   city:     string;
   country:  string;
+}
+
+export enum Role {
+  ADMIN = 'ADMIN',
+  USER = 'USER',
 }
