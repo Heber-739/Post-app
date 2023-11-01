@@ -11,8 +11,8 @@
    </ng-container>
 <span class="spacer"></span>
 
-<ol class="breadcrumb">
-  <li *ngFor="let breadcrumb of breadcrumbs" class="item">
+<ol class="breadcrumb" matTooltip="Volver a posts">
+  <li *ngFor="let breadcrumb of breadcrumbs" routerLink="/home" >
       {{ breadcrumb }}
   </li>
 </ol>

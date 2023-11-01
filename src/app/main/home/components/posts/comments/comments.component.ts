@@ -3,6 +3,8 @@ import { Component, EventEmitter, Input, OnInit,OnDestroy ,Output } from '@angul
 import { Comment, CreateComment, DeleteComment, UpdateComponent } from 'src/app/interfaces/comment.interface';
 import { CommentsService } from 'src/app/services/comments.service';
 import { AuthService } from 'src/app/services/auth.service';
+import { FireUser } from 'src/app/interfaces/user.interface';
+import { Post, State } from 'src/app/interfaces/posts.interface';
 
 @Component({
   selector: 'app-comments',
@@ -10,17 +12,18 @@ import { AuthService } from 'src/app/services/auth.service';
   styleUrls: ['./comments.component.css']
 })
 export class CommentsComponent implements OnInit, OnDestroy {
-  public userId!:string;
+  public user!:FireUser;
   public upperLowerWord: boolean = false;
   public comments:Comment[]=[];
   public editComment:Comment|null = null;
   private subscriptions:Subscription[]=[];
   public addComment:boolean = false;
 
-  @Input() postId:string|null = null;
+  @Input() post!:Post;
   @Output() dateOutput = new EventEmitter<Date>();
 
-  constructor(private auth:AuthService,private commentsService:CommentsService) { }
+  constructor(private auth:AuthService,
+    private commentsService:CommentsService) { }
 
   ngOnInit(): void {
     this.getComments()
@@ -34,7 +37,7 @@ export class CommentsComponent implements OnInit, OnDestroy {
       private getUser(){
     this.subscriptions.push(this.auth.getUser()
     .subscribe({
-      next:(res)=>this.userId = res.uid!
+      next:(res)=>this.user = res
     }))
   }
 
@@ -43,11 +46,9 @@ export class CommentsComponent implements OnInit, OnDestroy {
   }
 
   private getComments():void{
-    if(this.postId){
-      this.subscriptions.push(
-        this.commentsService.getCommentsByPostId(this.postId).subscribe({
-        next:(res)=> this.comments = this.sortCommentsByDate(res)
-      }))
+    if(this.post.state !== State.PROTECTED){
+      this.commentsService.getCommentsByPostId(this.post.id)
+      .then((res)=>this.comments = res)
     }
   }
 

@@ -12,8 +12,8 @@ import { UserComponent } from './components/user/user.component';
 import { CommentFormComponent } from './components/posts/comment-form/comment-form.component';
 import { CommentsComponent } from './components/posts/comments/comments.component';
 import { PostListComponent } from './components/posts/post-list/post-list.component';
-import { PostDetailsComponent } from './components/posts/post-details/post-details.component';
 import { PostFormComponent } from './components/posts/post-form/post-form.component';
+import { PostDetailsComponent } from './components/posts/post-details/post-details.component';
 
 
 

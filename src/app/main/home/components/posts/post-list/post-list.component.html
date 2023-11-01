@@ -33,7 +33,7 @@
           </button>
 
           <mat-menu #menu="matMenu">
-            <button mat-menu-item [routerLink]="['/home/posts/post',element.id]" >
+            <button mat-menu-item [routerLink]="['/home/post',element.id]" >
                <mat-icon>launch</mat-icon>
               <span>Ver Post</span>
               </button>
@@ -72,7 +72,7 @@
             </button>
           </mat-menu>
           <ng-template #default >
-          <button mat-stroked-button color="primary" [routerLink]="['/home/posts/post',element.id]" >Ver</button>
+          <button mat-stroked-button color="primary" [routerLink]="['/home/post',element.id]" >Ver</button>
           </ng-template>
 
 

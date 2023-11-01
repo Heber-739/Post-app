@@ -2,7 +2,8 @@ import { Observable, catchError, map, tap } from 'rxjs';
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { environment } from 'src/environments/environment';
-import { Comment, NewCommnet,ResponseCreateComment, ResponseCommentsByID, CreateComment, UpdateComponent, DeleteComment } from '../interfaces/comment.interface';
+import { Comment, NewCommnet } from '../interfaces/comment.interface';
+import { Firestore, collection, getDocs, query, where } from '@angular/fire/firestore';
 
 @Injectable({
   providedIn: 'root'
@@ -13,13 +14,16 @@ export class CommentsService {
   private urlDelete:string = environment.urlBase+environment.commentDelete;
   private urlUpdate:string = environment.urlBase+environment.commentUpdate;
 
-  constructor(private http: HttpClient) { }
+  constructor(private fire:Firestore) { }
 
 
-  public getCommentsByPostId(postId:string):Observable<Comment[]>{
-    return this.http.get<ResponseCommentsByID>(`${this.url}/${postId}`).pipe(
-      map((res)=>res.data.comments)
-    )
+  public getCommentsByPostId(postId:string):Promise<Comment[]>{
+    return new Promise(async (resolve)=>{
+      const docRef = collection(this.fire,`posts/${postId}/comments`)
+      const commentsData = await getDocs(docRef)
+      const comments = commentsData.docs.map((comm)=> comm.data() as Comment)
+      resolve(comments)
+        })
   }
 
   public createComment(create:CreateComment):Observable<NewCommnet>{

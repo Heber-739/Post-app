@@ -34,28 +34,24 @@ export class PostService {
     }
 
 
-    public getPosts(uid:string):Promise<Post[]>{
+    public getPosts(uid:string,isAdmin:boolean):Promise<Post[]>{
       return new Promise(async (resolve)=>{
         if(this.allPosts.length>0){
           resolve(this.allPosts)
         } else if(localStorage.getItem('allPosts')){
           resolve(JSON.parse(localStorage.getItem('allPosts')!))
         }
-        let posts:Post[] = []
         const data = await getDocs(collection(this.fire,'posts'))
         data.docs.forEach((dat)=>{
           const post = dat.data() as Post;
           if(post.author.uid === uid){
-              this.userPosts.push(post)
-              posts.push(post)
               this.allPosts.push(post)
-          }else if (post.state !== State.PRIVATE){
-              posts.push(post)
+          }else if (post.state !== State.PRIVATE || isAdmin){
               this.allPosts.push(post)
           }
         })
         localStorage.setItem('allPosts',JSON.stringify(this.allPosts))
-         resolve(posts);
+         resolve(this.allPosts);
       })
     }
 
@@ -81,12 +77,29 @@ export class PostService {
       })
     }
 
-    public deletePost(id:string){
+    hiddenPost(id:string){
+      this.allPosts = this.allPosts.filter((p)=>p.id!=id)
+    }
+
+    public deletePost(id:string):Promise<void>{
       Swal.fire({
-        /* agregar verificacion */
-      })
-      const placeDocRef = doc(this.fire, `posts/${id}`);
-    return deleteDoc(placeDocRef)
+  title: 'Do you want to save the changes?',
+  showDenyButton: true,
+  showCancelButton: true,
+  confirmButtonText: 'Eliminar',
+  denyButtonText: 'Cancelar',
+}).then((result) => {
+  if (result.isConfirmed) {
+    const placeDocRef = doc(this.fire, `posts/${id}`);
+    deleteDoc(placeDocRef).then(()=>{
+      this.hiddenPost(id)
+      Swal.fire('Post eliminado!', '', 'success')
+    })
+  } else if (result.isDenied) {
+    Swal.fire('Cancelado', '', 'info')
+  }
+})
+return Promise.resolve()
     }
 
 }

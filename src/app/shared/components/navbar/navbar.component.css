@@ -7,10 +7,10 @@
   gap: 5px;
   margin: 0;
   list-style: none;
+  cursor: pointer;
 }
 .breadcrumb .item:nth-child(n+2)::before{
   content: " /";
-
 }
 .photo{
   vertical-align: middle;

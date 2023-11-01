@@ -1,10 +1,13 @@
-<section class="section">
+<section class="section" *ngIf="post">
 
   <mat-card class="mat_card">
     <mat-card-header>
       <mat-card-title-group>
         <mat-card-subtitle >Post Id: {{ post.id }}</mat-card-subtitle>
         <mat-card-title>{{ post.title | titlecase }}</mat-card-title>
+        <mat-card-subtitle >Autor: {{ post.author.username }}</mat-card-subtitle>
+        <img mat-card-md-image [src]="post.author.imageUrl"  alt="Image of {{post.author.username}}">
+
       </mat-card-title-group>
     </mat-card-header>
     <mat-card-content>
@@ -15,6 +18,7 @@
     </p>
   </mat-card>
 
-  <app-comments [postId]="getId()" (dateOutput)="reciveDate($event)">
+  <app-comments
+  [post]="post" (dateOutput)="reciveDate($event)">
   </app-comments>
 </section>

@@ -47,7 +47,7 @@ export class PostListComponent implements OnInit {
   }
 
   private getPosts():void{
-    this.postService.getPosts(this.user.uid).then((posts)=> {
+    this.postService.getPosts(this.user.uid,this.isAdmin).then((posts)=> {
       this.posts = posts;
       this.setPaginator(posts);
     })

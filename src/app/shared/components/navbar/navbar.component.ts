@@ -15,6 +15,7 @@ export class NavbarComponent implements OnInit, OnDestroy {
     "register": "Nuevo registro",
     "home":"Home",
     "posts":"Lista de posts",
+    "post":"Post",
     "user": "Usuario"
   }
   public breadcrumbs: string[]=[];
@@ -52,13 +53,11 @@ export class NavbarComponent implements OnInit, OnDestroy {
   private getBreadCrumb():void {
     this.breadcrumbs = []
     let links: string[] = this.router.url.split('/') ?? []
-    if((/[:]/g).test( links[-1])){
-      const param = links.pop();
-      links.push(param!.split(':')[1]);
-    }
     links.forEach((link:string)=>{
-      if(link!=''){
+      if(link!='' && this.replaceBC[link]){
         this.breadcrumbs.push(this.replaceBC[link])
+      } else {
+        this.breadcrumbs.push(link)
       }
     })
 

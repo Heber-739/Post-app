@@ -1,3 +1,5 @@
+import { Comment } from "./comment.interface";
+
 export interface Post {
   author:           Author;
   title:            string;
@@ -6,6 +8,7 @@ export interface Post {
   creationDate:     Date;
   modificationDate: Date;
   id:               string;
+  comments?:        Comment[];
 }
 
 export interface Author {
@@ -16,5 +19,6 @@ export interface Author {
 
 export enum State {
   PRIVATE = "PRIVATE",
+  PROTECTED = "PROTECTED",
   PUBLIC = "PUBLIC"
 }
