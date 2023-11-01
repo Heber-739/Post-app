@@ -117,8 +117,6 @@ export class UserFormComponent implements OnInit, OnDestroy {
       return;
     }
 
-    console.log(this.userForm.value)
-
     if(this.user){
       this.authService.updateUser(this.user);
     }else{

@@ -1,15 +1,15 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
-import { Subscription, switchMap, tap } from 'rxjs';
-import { Post } from 'src/app/interfaces/responsePostList.interface';
+import { Subscription, catchError, map, switchMap, tap } from 'rxjs';
+import { Post } from 'src/app/interfaces/posts.interface';
 import { PostService } from 'src/app/services/post.service';
 
 @Component({
-  selector: 'app-post-detail-home',
-  templateUrl: './post-detail-home.component.html',
-  styleUrls: ['./post-detail-home.component.css'],
+  selector: 'app-post-details',
+  templateUrl: './post-details.component.html',
+  styleUrls: ['./post-details.component.css'],
 })
-export class PostDetailHomeComponent implements OnInit {
+export class PostDetailsComponent implements OnInit {
   public post!: Post;
   public lastDateComment?: Date;
   private subscriptions: Subscription[]=[]
@@ -18,7 +18,9 @@ export class PostDetailHomeComponent implements OnInit {
     private postService: PostService,
     private activatedRoute: ActivatedRoute,
     private router: Router
-  ) {}
+  ) {
+    console.log('construyo')
+  }
 
   ngOnInit(): void {
    this.paramId()
@@ -28,7 +30,10 @@ export class PostDetailHomeComponent implements OnInit {
     this.subscriptions.push(
       this.activatedRoute.params.pipe(
         tap(console.log),
-      switchMap(({ id }) => this.postService.getPostDetail(id)),
+        map(({id})=>this.postService.getPostById(id)),
+        catchError((err)=>{
+          throw new Error(err)
+        }),
       tap(console.log))
     .subscribe({
       next: (res) => this.post = res,

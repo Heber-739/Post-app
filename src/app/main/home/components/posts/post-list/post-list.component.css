@@ -11,6 +11,7 @@ th.titles{
   background-color: indigo;
   color: white;
   font-size: 1.2em;
+  text-align: center;
 }
 .body{
 max-width: clamp(200px,80vw,900px);
@@ -26,14 +27,11 @@ white-space: nowrap;
 max-width: 8vw;
 text-align: center;
 }
-
 .link{
   padding: 0;
+  width: clamp(120px,12vw,250px);
   text-align: center;
-  width: 12vw;
-  position: relative;
 }
-
 .paginator{
   margin: 0 auto ;
   width: clamp(220px,95dvw,700px);
@@ -41,10 +39,8 @@ text-align: center;
 .hidden{
   color: rgb(150, 150, 150);
 }
-.options{
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  margin: auto;
-  right: 0;
+.add_post{
+  position: fixed;
+  right: 10px;
+  bottom: 10px;
 }

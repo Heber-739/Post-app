@@ -19,42 +19,61 @@
 
     <!-- Weight Column -->
     <ng-container matColumnDef="Actions">
-      <th mat-header-cell class="titles link" *matHeaderCellDef> Actions </th>
+      <th mat-header-cell class="titles link" *matHeaderCellDef> Ver Post </th>
       <td mat-cell class="link" *matCellDef="let element">
 
-        <button mat-stroked-button color="primary" [routerLink]="['/home/posts/post/',element.id]" >Ver más</button>
 
 
-          <button mat-icon-button class="options" [matMenuTriggerFor]="menu" *ngIf="user && canEdit(element.author.uid)">
-            <mat-icon>more_vert</mat-icon>
+
+
+
+          <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="user && canEdit(element.author.uid); else default"
+          matTooltip="Opciones del post">
+            <mat-icon>menu</mat-icon>
           </button>
 
           <mat-menu #menu="matMenu">
+            <button mat-menu-item [routerLink]="['/home/posts/post',element.id]" >
+               <mat-icon>launch</mat-icon>
+              <span>Ver Post</span>
+              </button>
 
-            <button mat-menu-item [disabled]="element.author.uid !== user.uid" >
+            <button mat-menu-item [disabled]="element.author.uid !== user.uid"
+            matTooltip="Editar Post"
+            (click)="openForm(element)"
+            >
               <mat-icon>edit</mat-icon>
               <span>Editar Post</span>
             </button>
 
-            <button mat-menu-item [disabled]="element.author.uid !== user.uid" >
+            <button mat-menu-item [disabled]="element.author.uid !== user.uid || isAdmin"
+            matTooltip="Eliminar post"
+            (click)="deletePost(element.id)"
+            >
               <mat-icon>delete</mat-icon>
               <span>Eliminar</span>
             </button>
 
              <button mat-menu-item
             *ngIf="element.state === 'PUBLIC'"
+            matTooltip="Ocultar post"
+            [disabled]="isAdmin"
             (click)="changeVisibility(element.id,false)" >
               <mat-icon>visibility</mat-icon>
               <span>Visible</span>
             </button>
 
             <button mat-menu-item
+            matTooltip="Visibilizar post"
             *ngIf="element.state !== 'PUBLIC'"
             (click)="changeVisibility(element.id,true)">
               <mat-icon>visibility_off</mat-icon>
               <span>Oculto</span>
             </button>
           </mat-menu>
+          <ng-template #default >
+          <button mat-stroked-button color="primary" [routerLink]="['/home/posts/post',element.id]" >Ver</button>
+          </ng-template>
 
 
       </td>
@@ -67,4 +86,22 @@
   <mat-paginator class="paginator" [pageSizeOptions]="[10, 15, 20]"
                  showFirstLastButtons>
   </mat-paginator>
+
+  <button class="add_post" mat-fab color="primary"  matTooltip="Crear nuevo post"
+  (click)="openForm()">
+    <mat-icon >add</mat-icon>
+  </button>
+
 </div>
+<div
+class="new_post_container"
+*ngIf="editPost" (click)="finish(false)" >
+</div>
+  <app-post-form
+  *ngIf="editPost"
+  class="newPost"
+  [post]="postToEdit"
+  (finish)="finish($event)"
+  >
+
+  </app-post-form>

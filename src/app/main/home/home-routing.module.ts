@@ -1,12 +1,13 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
-import { PostDetailHomeComponent } from './components/post-details/components/post-detail-home/post-detail-home.component';
-import { PostListHomeComponent } from './components/post-list/components/post-list-home/post-list-home.component';
 import { UserComponent } from './components/user/user.component';
+import { PostDetailsComponent } from './components/posts/post-details/post-details.component';
+import { PostListComponent } from './components/posts/post-list/post-list.component';
 
 const routes: Routes = [
-      {path:'posts',component:PostListHomeComponent},
-    {path:'post/:id',component:PostDetailHomeComponent},
+    {path:'posts',component:PostListComponent,children:[
+      {path:'post/:id',component:PostDetailsComponent},
+    ]},
     {path:'user',component:UserComponent},
     {path:'**', redirectTo:'posts'}
 ]

@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Router } from '@angular/router';
 
@@ -23,7 +22,6 @@ export class AuthService {
 
   constructor(
     private router: Router,
-    private http:HttpClient,
     private auth: Auth,
     private fire: Firestore,
   ) {
@@ -48,14 +46,11 @@ export class AuthService {
 
   /* ----- auth ----- */
   verifyImg(url: string): void {
-    this.http.get(url).subscribe({
-      next:()=>this.fireAlert('Imagen válida'),
-      error:()=>this.fireAlert('Imagen inválida', true)
-    })
-    // fetch(new Request(url, { method: 'HEAD', mode: 'no-cors' }))
-    //   .then(() => )
-    //   .catch(() => );
+    fetch(new Request(url, { method: 'HEAD', mode: 'no-cors' }))
+      .then(() => this.fireAlert('Imagen válida'))
+      .catch(() => this.fireAlert('Imagen inválida', true));
   }
+
 
   public loginfire(user: LoginUser): void {
       signInWithEmailAndPassword(this.auth,user.mail, user.password)

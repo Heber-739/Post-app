@@ -16,6 +16,5 @@ export interface Author {
 
 export enum State {
   PRIVATE = "PRIVATE",
-  PROTECTED = "PROTECTED",
   PUBLIC = "PUBLIC"
 }

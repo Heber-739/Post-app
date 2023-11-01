@@ -1,0 +1,18 @@
+.form{
+  flex-direction: column;
+}
+.container_textarea{
+  margin: 15px auto;
+  width: 95%;
+  height: fit-content;
+}
+.textarea_title{
+  min-height: 60px;
+}
+.textarea_description{
+  min-height: 120px;
+}
+
+.radio{
+  margin: 0 auto 15px;
+}
