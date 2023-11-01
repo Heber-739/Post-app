@@ -41,7 +41,7 @@
               <span>Editar Post</span>
             </button>
 
-            <button mat-menu-item [disabled]="element.author.uid !== user.uid || isAdmin"
+            <button mat-menu-item
             matTooltip="Eliminar post"
             (click)="deletePost(element.id)"
             >
@@ -52,7 +52,6 @@
              <button mat-menu-item
             *ngIf="element.state === 'PUBLIC'"
             matTooltip="Ocultar post"
-            [disabled]="isAdmin"
             (click)="changeVisibility(element.id,false)" >
               <mat-icon>visibility</mat-icon>
               <span>Visible</span>
