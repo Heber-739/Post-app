@@ -20,7 +20,7 @@ export class PageNotFoundComponent implements OnInit, OnDestroy {
     clearInterval(this.interval)
   }
 
-  private initInterval(){
+  private initInterval():void{
     const interval = setInterval(()=>{
       this.redirectIn--
       if(this.redirectIn<=0){

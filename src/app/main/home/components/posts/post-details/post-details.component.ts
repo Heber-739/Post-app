@@ -15,8 +15,7 @@ export class PostDetailsComponent implements OnInit {
   constructor(
     private postService: PostService,
     private router: Router
-  ) {
-  }
+  ) {}
 
   ngOnInit(): void {
    this.paramId()
@@ -31,13 +30,10 @@ export class PostDetailsComponent implements OnInit {
         this.router.navigate(['/404'])
       }
     })
-
-
   }
 
   reciveDate(date:Date):void{
     this.lastDateComment=date;
-
   }
 
 }

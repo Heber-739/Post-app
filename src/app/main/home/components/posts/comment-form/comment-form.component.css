@@ -3,9 +3,9 @@
   min-height: 150px ;
 }
 .edit_form_container{
-  position: fixed;
   display: grid;
   place-items: center;
+  position: fixed;
   width: clamp(300px, 50%, 768px);
 }
 
@@ -17,9 +17,9 @@ input.mat-input-element{
 }
 
 .container_textarea{
+  height: fit-content;
   margin: 15px auto;
   width: 95%;
-  height: fit-content;
 }
 .textarea_title{
   min-height: 60px;

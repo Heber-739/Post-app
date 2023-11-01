@@ -7,39 +7,38 @@ import { AuthService } from 'src/app/services/auth.service';
 @Component({
   selector: 'app-user',
   templateUrl: './user.component.html',
-  styleUrls: ['./user.component.css']
+  styleUrls: ['./user.component.css'],
 })
-export class UserComponent implements OnInit,OnDestroy {
-  public user: FireUser |null = null;
-  edit:boolean = false;
-  private subscriptions:Subscription[]=[];
+export class UserComponent implements OnInit, OnDestroy {
+  public user: FireUser | null = null;
+  edit: boolean = false;
+  private subscriptions: Subscription[] = [];
   public userForm!: FormGroup;
 
-  constructor(private auth:AuthService) {}
+  constructor(private auth: AuthService) {}
 
   ngOnInit(): void {
     this.getUser();
   }
 
   ngOnDestroy(): void {
-    this.subscriptions.forEach(s=>s.unsubscribe())
+    this.subscriptions.forEach((s) => s.unsubscribe());
   }
 
-  finish(){
+  finish(): void {
     this.edit = !this.edit;
   }
 
-  private getUser(){
-    this.subscriptions.push(this.auth.getUser()
-    .subscribe({
-      next:(user)=>this.user = user,
-    }))
+  private getUser(): void {
+    this.subscriptions.push(
+      this.auth.getUser().subscribe({
+        next: (user) => (this.user = user),
+      })
+    );
   }
-  public getDate():Date{
-    if(!this.user) return new Date();
+  public getDate(): Date {
+    if (!this.user) return new Date();
     const seconds = Object.values(this.user.birthday)[0];
-    return new Date(seconds * 1000)
+    return new Date(seconds * 1000);
   }
-
-
 }

@@ -1,46 +1,48 @@
-.mat-elevation-z8{
+.mat-elevation-z8 {
   width: 100%;
 }
-.table{
+.table {
   margin: 0 auto;
   max-width: 1024px;
   width: 100%;
 }
 
-th.titles{
+th.titles {
   background-color: indigo;
   color: white;
   font-size: 1.2em;
   text-align: center;
 }
-.body{
-max-width: clamp(200px,80vw,900px);
-padding: 0 10px;
+.body {
+  max-width: clamp(200px, 80vw, 900px);
+  padding: 0 10px;
 }
-.body,.id{
+.body,
+.id {
   overflow: hidden;
-text-align: center;
-text-overflow: ellipsis;
-white-space: nowrap;
+  text-align: center;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
-.id,.id_title{
-max-width: 8vw;
-text-align: center;
-}
-.link{
-  padding: 0;
-  width: clamp(120px,12vw,250px);
+.id,
+.id_title {
+  max-width: 8vw;
   text-align: center;
 }
-.paginator{
-  margin: 0 auto ;
-  width: clamp(220px,95dvw,700px);
+.link {
+  padding: 0;
+  text-align: center;
+  width: clamp(120px, 12vw, 250px);
 }
-.hidden{
+.paginator {
+  margin: 0 auto;
+  width: clamp(220px, 95dvw, 700px);
+}
+.hidden {
   color: rgb(150, 150, 150);
 }
-.add_post{
+.add_post {
+  bottom: 10px;
   position: fixed;
   right: 10px;
-  bottom: 10px;
 }

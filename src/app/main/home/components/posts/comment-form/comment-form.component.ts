@@ -1,4 +1,4 @@
-import { Component, Input,EventEmitter, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
+import { Component, Input,EventEmitter, OnInit, Output } from '@angular/core';
 import { FormControl, Validators } from '@angular/forms';
 
 @Component({
@@ -14,7 +14,7 @@ export class CommentFormComponent implements OnInit {
   label:string = 'Nuevo Comentario'
   public commentControl = new FormControl('',[Validators.required,
     Validators.minLength(5),
-    Validators.maxLength(200),])
+    Validators.maxLength(200)])
 
   constructor() { }
 
@@ -25,6 +25,7 @@ export class CommentFormComponent implements OnInit {
   private initFormField(){
     if(this.comment){
       this.commentControl.setValue(this.comment)
+      this.label = "Nueva descripción"
     }
   }
 

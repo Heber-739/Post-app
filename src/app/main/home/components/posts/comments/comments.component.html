@@ -6,14 +6,16 @@
         *ngIf="isAdmin || post.author.uid === user.uid"
         (click)="toogleComments()"
         [matTooltip]="isProtected ? 'Activar comentarios':'Desactivar comentarios'"
-        >{{isProtected ? 'Activos':'Inactivos' }}</button>
+        >{{isProtected ? 'Inactivos':'Activos' }}</button>
+        <span class="spacer"></span>
 
         <button mat-raised-button color="primary" (click)="changeToggleName()"
         [ngClass]="{'changeButtonColor' : upperLowerWord}"
         >{{upperLowerWord? 'nombre':'NOMBRE'}}</button>
+        <span class="spacer"></span>
 
         <button mat-raised-button class="add_comment" *ngIf="!addComment"
-        color="primary" (click)="addComment = !addComment" >Comentar <mat-icon>add</mat-icon>
+        color="primary" [disabled]="isProtected" (click)="addComment = !addComment" >Comentar <mat-icon>add</mat-icon>
         </button>
 
         <button mat-raised-button class="add_comment" *ngIf="addComment"
@@ -25,16 +27,12 @@
 
     <comment-form
     class="comment_form"
-    *ngIf="addComment"
+    *ngIf="addComment && isProtected"
     (newInputText)="addNewComment($event)"></comment-form>
 
   </mat-card>
 
   <mat-card class="list" *ngFor="let comment of comments">
-
-
-
-
 
     <mat-card-header>
 
@@ -44,14 +42,12 @@
       </ng-container>
 
       <comment-form
-      *ngIf="editComment && editComment!.id === comment.id"
+      *ngIf="editComment && editComment!.id === comment.id && isProtected"
       [comment]="editComment.comment!"
       (newInputText)="saveComment($event)"
       ></comment-form>
 
       </mat-card-header>
-
-
 
 
     <mat-card-actions align="end">
@@ -61,10 +57,9 @@
 
      <ng-container *ngIf="comment.author.uid == user.uid">
 
-
       <button *ngIf="editComment?.id == comment.id"  mat-button (click)="sendEditComment(null)" >cancel</button>
 
-      <button   (click)="sendEditComment(comment)"
+      <button [disabled]="isProtected"  (click)="sendEditComment(comment)"
       *ngIf="editComment?.id != comment.id" mat-button>
       <mat-icon>edit</mat-icon>
     </button>
@@ -85,7 +80,6 @@
       >visibility</mat-icon>
 
     </mat-card-actions>
-
 
   </mat-card>
   </article>

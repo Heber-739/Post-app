@@ -1,21 +1,21 @@
 .breadcrumb {
   background: none;
-  font-size: 0.8rem;
   color: white;
+  cursor: pointer;
   display: flex;
   flex-direction: row;
+  font-size: 0.8rem;
   gap: 5px;
-  margin: 0;
   list-style: none;
-  cursor: pointer;
+  margin: 0;
 }
 .breadcrumb .item:nth-child(n+2)::before{
   content: " /";
 }
 .photo{
-  vertical-align: middle;
-  height: 80%;
-  width: auto;
   border-radius: 3px;
   box-shadow: 1px 1px 4px black;
+  height: 80%;
+  vertical-align: middle;
+  width: auto;
 }

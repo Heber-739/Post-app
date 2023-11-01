@@ -4,7 +4,6 @@ import { LoginUser } from 'src/app/interfaces/loginUser.interface';
 import { AuthService } from 'src/app/services/auth.service';
 
 
-
 @Component({
   selector: 'app-login',
   templateUrl: './login.component.html',
@@ -22,14 +21,14 @@ export class LoginComponent implements OnInit {
     this.initForm()
   }
 
-  private initForm(){
+  private initForm():void{
     this.loginForm = this.fb.group({
       mail:['',Validators.required],
       password:['',Validators.required]
     })
   }
 
-  onSubmit() {
+  onSubmit():void{
     if (this.loginForm.invalid) {
       this.loginForm.markAllAsTouched();
       return;

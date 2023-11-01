@@ -2,9 +2,9 @@
   flex-direction: column;
 }
 .container_textarea{
+  height: fit-content;
   margin: 15px auto;
   width: 95%;
-  height: fit-content;
 }
 .textarea_title{
   min-height: 60px;

@@ -17,32 +17,31 @@ import { FireUser, Role } from '../interfaces/user.interface';
   providedIn: 'root',
 })
 export class AuthService {
-   private fireUser = new BehaviorSubject<FireUser>({} as FireUser);
-   private token:string| null = null;
+  private fireUser = new BehaviorSubject<FireUser>({} as FireUser);
+  private token: string | null = null;
 
   constructor(
     private router: Router,
     private auth: Auth,
-    private fire: Firestore,
+    private fire: Firestore
   ) {
     this.checkLoginData();
   }
 
   private checkLoginData(): void {
-    const token = localStorage.getItem('token')
-    const user = localStorage.getItem('user')
-    if(!token || !user){
+    const token = localStorage.getItem('token');
+    const user = localStorage.getItem('user');
+    if (!token || !user) {
       localStorage.clear();
     } else {
       this.fireUser.next(JSON.parse(user));
-      this.token = JSON.parse(token)
+      this.token = JSON.parse(token);
     }
   }
 
-  public getToken(): string | null{
+  public getToken(): string | null {
     return this.token;
   }
-
 
   /* ----- auth ----- */
   verifyImg(url: string): void {
@@ -51,30 +50,28 @@ export class AuthService {
       .catch(() => this.fireAlert('Imagen inválida', true));
   }
 
-
   public loginfire(user: LoginUser): void {
-      signInWithEmailAndPassword(this.auth,user.mail, user.password)
+    signInWithEmailAndPassword(this.auth, user.mail, user.password)
       .then((res) => {
-        res.user.getIdTokenResult()
-        .then((res)=>{
-          localStorage.setItem('token',JSON.stringify(res))
-          this.token = res.token
+        res.user.getIdTokenResult().then((res) => {
+          localStorage.setItem('token', JSON.stringify(res));
+          this.token = res.token;
           this.fireAlert('Inicio de sesion exitoso!');
-        this.getFireUser();
-        this.router.navigate(['/home']);
-        })
-      }).catch(()=>this.fireAlert("Credenciales invalidas",true))
-    }
-
-  public registerFire(user: RegisterUser): void {
-      createUserWithEmailAndPassword(this.auth,user.mail, user.password)
-      .then((value: any) => {
-        const res = value as FireAuthResponse;
-        this.addFireUser(user, res.user.uid);
-      });
+          this.getFireUser();
+          this.router.navigate(['/home']);
+        });
+      })
+      .catch(() => this.fireAlert('Credenciales invalidas', true));
   }
 
-
+  public registerFire(user: RegisterUser): void {
+    createUserWithEmailAndPassword(this.auth, user.mail, user.password).then(
+      (value: any) => {
+        const res = value as FireAuthResponse;
+        this.addFireUser(user, res.user.uid);
+      }
+    );
+  }
 
   private fireAlert(message: string, err?: boolean): void {
     Swal.fire({
@@ -84,39 +81,38 @@ export class AuthService {
     });
   }
 
-   /* ----- CRUD User ----- */
+  /* ----- CRUD User ----- */
 
-  private addFireUser(user: RegisterUser, uid: string) {
+  private addFireUser(user: RegisterUser, uid: string): void {
     const { password, ...others } = user;
     const newuser: FireUser = { ...others, uid, role: [Role.USER] };
-    const dataRef = collection(this.fire,`users`)
-    const docRef = doc(dataRef,`${uid}`);
+    const dataRef = collection(this.fire, `users`);
+    const docRef = doc(dataRef, `${uid}`);
 
-    setDoc(docRef,newuser)
-      .then(() => {
-        this.loginfire({ mail: user.mail, password });
-      });
+    setDoc(docRef, newuser).then(() => {
+      this.loginfire({ mail: user.mail, password });
+    });
   }
 
-  private async getFireUser():Promise<void> {
-    const uid = this.auth.currentUser?.uid
-    const user = doc(this.fire,`users/${uid}`)
-    const data =  await getDoc(user)
+  private async getFireUser(): Promise<void> {
+    const uid = this.auth.currentUser?.uid;
+    const user = doc(this.fire, `users/${uid}`);
+    const data = await getDoc(user);
     const userData = data.data() as FireUser;
-    localStorage.setItem('user',JSON.stringify(userData))
-    this.fireUser.next(userData)
+    localStorage.setItem('user', JSON.stringify(userData));
+    this.fireUser.next(userData);
   }
 
-  public updateUser(newUser:FireUser):void {
-    const uid = this.auth.currentUser?.uid
-    const user = doc(this.fire,`users/${uid}`) as DocumentReference<FireUser>;
-    updateDoc(user,newUser).then(()=>{
-      this.getFireUser()
-    })
+  public updateUser(newUser: FireUser): void {
+    const uid = this.auth.currentUser?.uid;
+    const user = doc(this.fire, `users/${uid}`) as DocumentReference<FireUser>;
+    updateDoc(user, newUser).then(() => {
+      this.getFireUser();
+    });
   }
 
-  public getUser():Observable<FireUser>{
-    return this.fireUser.asObservable()
+  public getUser(): Observable<FireUser> {
+    return this.fireUser.asObservable();
   }
 
   logout(): void {

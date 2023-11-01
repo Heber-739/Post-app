@@ -22,11 +22,6 @@
       <th mat-header-cell class="titles link" *matHeaderCellDef> Ver Post </th>
       <td mat-cell class="link" *matCellDef="let element">
 
-
-
-
-
-
           <button mat-icon-button [matMenuTriggerFor]="menu" *ngIf="user && canEdit(element.author.uid); else default"
           matTooltip="Opciones del post">
             <mat-icon>menu</mat-icon>
@@ -103,5 +98,4 @@ class="new_post_container"
   [post]="postToEdit"
   (finish)="finish($event)"
   >
-
   </app-post-form>

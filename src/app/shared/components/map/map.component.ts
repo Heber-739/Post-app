@@ -7,80 +7,74 @@ import {
   EventEmitter,
   Output,
   Renderer2,
-} from '@angular/core';import { LngLat, Map, Marker } from 'mapbox-gl';
+} from '@angular/core';import {  Map, Marker } from 'mapbox-gl';
 import Swal from 'sweetalert2';
 
 
 @Component({
   selector: 'app-map',
-  template: `<div #map class="map" ></div>`,
-  styleUrls: ['./map.component.css']
+  template: `<div #map class="map"></div>`,
+  styleUrls: ['./map.component.css'],
 })
-export class MapComponent implements AfterViewInit{
-
+export class MapComponent implements AfterViewInit {
   private map!: Map;
   private marker!: Marker;
 
-
   @ViewChild('map') divMap?: ElementRef;
-  @Input() lngLat:[number,number] = [-12,-54];
-  @Input() editMode:boolean = false;
-  @Output() emitCoords = new EventEmitter<[number,number]>();
+  @Input() lngLat: [number, number] = [-12, -54];
+  @Input() editMode: boolean = false;
+  @Output() emitCoords = new EventEmitter<[number, number]>();
 
-  constructor(private renderer:Renderer2){}
+  constructor(private renderer: Renderer2) {}
 
   ngAfterViewInit(): void {
-    this.createMap()
+    this.createMap();
   }
 
-  private createMap(){
+  private createMap(): void {
     if (!this.lngLat) return;
-    if(!this.divMap) return;
+    if (!this.divMap) return;
 
     this.map = new Map({
-      container: this.divMap.nativeElement, // container ID
-      style: 'mapbox://styles/mapbox/streets-v12', // style URL
-      center: this.lngLat, // starting position [lng, lat]
-      zoom: 12, // starting zoom,
-      interactive:this.editMode
+      container: this.divMap.nativeElement,
+      style: 'mapbox://styles/mapbox/streets-v12',
+      center: this.lngLat,
+      zoom: 12,
+      interactive: this.editMode,
     });
     this.marker = new Marker();
-    if(this.editMode) {
-      this.marker = new Marker({draggable:true})
-      this.getUbication()
+    if (this.editMode) {
+      this.marker = new Marker({ draggable: true });
+      this.getUbication();
     }
-    this.renderer.listen(this.divMap.nativeElement, 'mouseup',()=>{
-      const coord = this.marker.getLngLat()
-      this.emitCoords.emit([coord.lng,coord.lat])
-    })
-    this.setUbication()
-    this.marker.addTo(this.map)
+    this.renderer.listen(this.divMap.nativeElement, 'mouseup', () => {
+      const coord = this.marker.getLngLat();
+      this.emitCoords.emit([coord.lng, coord.lat]);
+    });
+    this.setUbication();
+    this.marker.addTo(this.map);
   }
 
-
-
-
-  private setUbication(){
-    this.marker.setLngLat(this.lngLat)
+  private setUbication(): void {
+    this.marker.setLngLat(this.lngLat);
     this.map.flyTo({
-      zoom:12,
-      center:this.lngLat
-    })
+      zoom: 12,
+      center: this.lngLat,
+    });
   }
 
-  private getUbication(){
-          navigator.geolocation.getCurrentPosition(
-            ({ coords }) => {
-              this.lngLat = [coords.longitude, coords.latitude];
-              this.setUbication()
-            },
-            (err) => {
-              Swal.fire({
-              title: 'No se pudo conectar a la ubicación',
-              icon: 'error',
-            })
-              console.log(err);
-            }
-          );
+  private getUbication(): void {
+    navigator.geolocation.getCurrentPosition(
+      ({ coords }) => {
+        this.lngLat = [coords.longitude, coords.latitude];
+        this.setUbication();
+      },
+      (err) => {
+        Swal.fire({
+          title: 'No se pudo conectar a la ubicación',
+          icon: 'error',
+        });
       }
+    );
+  }
 }
