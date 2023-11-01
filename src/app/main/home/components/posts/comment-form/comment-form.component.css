@@ -15,3 +15,12 @@
 input.mat-input-element{
  min-height: 150px;
 }
+
+.container_textarea{
+  margin: 15px auto;
+  width: 95%;
+  height: fit-content;
+}
+.textarea_title{
+  min-height: 60px;
+}

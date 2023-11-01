@@ -24,12 +24,14 @@ export class PostDetailsComponent implements OnInit {
 
   private paramId():void{
     const id = this.router.url.split('/').pop()
-    const post = this.postService.getPostById(id!)
-    if(post){
-      this.post = post
-    }else {
-      this.router.navigate(['/404'])
-    }
+    this.postService.getPostById(id!).then((post)=>{
+      if(post){
+        this.post = post
+      }else {
+        this.router.navigate(['/404'])
+      }
+    })
+
 
   }
 

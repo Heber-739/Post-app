@@ -4,7 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { Observable, map } from 'rxjs';
 import Swal from 'sweetalert2';
 
-import { Firestore, collection, addDoc, getDocs, doc, DocumentReference, updateDoc, deleteDoc } from '@angular/fire/firestore';
+import { Firestore, collection, addDoc, getDocs, doc, DocumentReference, updateDoc, deleteDoc, getDoc } from '@angular/fire/firestore';
 
 import { environment } from 'src/environments/environment';
 import { Post, State } from '../interfaces/posts.interface';
@@ -12,25 +12,18 @@ import { Post, State } from '../interfaces/posts.interface';
 @Injectable({providedIn: 'root'})
 
 export class PostService {
-    private urlPostById:string = environment.urlBase + environment.postById;
-    private userPosts:Post[] = []
     private allPosts:Post[] =[];
 
 
 
     constructor(
-      private http: HttpClient,
       private fire:Firestore) {}
 
-
-    public getPostDetail(postId:string):Observable<Post>{
-        return this.http.get<Post>(`${this.urlPostById}/${postId}`).pipe(
-          map((res)=>res)
-        )
-    }
-
-    public getPostById(id:string){
-      return this.allPosts.find((post)=>post.id===id);
+    public getPostById(id:string):Promise<Post>{
+      const data = doc(this.fire,`posts/${id}`) as DocumentReference<Post>;
+      return new Promise(async (resolve)=>{
+        await getDoc(data).then((res)=> resolve(res.data() as Post))
+      })
     }
 
 
@@ -77,13 +70,9 @@ export class PostService {
       })
     }
 
-    hiddenPost(id:string){
-      this.allPosts = this.allPosts.filter((p)=>p.id!=id)
-    }
-
     public deletePost(id:string):Promise<void>{
       Swal.fire({
-  title: 'Do you want to save the changes?',
+  title: 'Eliminar post?',
   showDenyButton: true,
   showCancelButton: true,
   confirmButtonText: 'Eliminar',
@@ -92,7 +81,7 @@ export class PostService {
   if (result.isConfirmed) {
     const placeDocRef = doc(this.fire, `posts/${id}`);
     deleteDoc(placeDocRef).then(()=>{
-      this.hiddenPost(id)
+      this.allPosts = this.allPosts.filter((p)=>p.id!=id)
       Swal.fire('Post eliminado!', '', 'success')
     })
   } else if (result.isDenied) {

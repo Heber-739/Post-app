@@ -14,11 +14,13 @@ import {MatProgressBarModule} from '@angular/material/progress-bar';
 import {MatDividerModule} from '@angular/material/divider';
 import {MatTooltipModule} from '@angular/material/tooltip';
 import {MatRadioModule} from '@angular/material/radio';
+import {MatBadgeModule} from '@angular/material/badge';
 
 
 
 @NgModule({
   exports: [
+    MatBadgeModule,
     MatRadioModule,
     MatFormFieldModule,
     MatTooltipModule,

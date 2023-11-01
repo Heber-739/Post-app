@@ -1,9 +1,13 @@
 <article class="article_container">
-
   <mat-card class="header">
     <mat-card-content>
       <mat-card-actions>
-        <button mat-raised-button color="primary" routerLink="/posts">Volver</button>
+        <button mat-raised-button color="primary"
+        *ngIf="isAdmin || post.author.uid === user.uid"
+        (click)="toogleComments()"
+        [matTooltip]="isProtected ? 'Activar comentarios':'Desactivar comentarios'"
+        >{{isProtected ? 'Activos':'Inactivos' }}</button>
+
         <button mat-raised-button color="primary" (click)="changeToggleName()"
         [ngClass]="{'changeButtonColor' : upperLowerWord}"
         >{{upperLowerWord? 'nombre':'NOMBRE'}}</button>
@@ -18,43 +22,81 @@
 
       </mat-card-actions>
     </mat-card-content>
-    <comment-form class="comment_form" *ngIf="addComment" (newInputText)="addNewComment($event)"></comment-form>
+
+    <comment-form
+    class="comment_form"
+    *ngIf="addComment"
+    (newInputText)="addNewComment($event)"></comment-form>
 
   </mat-card>
 
   <mat-card class="list" *ngFor="let comment of comments">
 
-    <mat-card-header *ngIf="!editComment">
-            <mat-card-title>Nombre: {{ comment.author.name | toggleWord:upperLowerWord }}</mat-card-title>
+
+
+
+
+    <mat-card-header>
+
+      <ng-container *ngIf="editComment?.id !== comment.id">
+        <mat-card-title>Nombre: {{ comment.author.name | toggleWord:upperLowerWord }}</mat-card-title>
         <mat-card-subtitle >{{ comment.comment }}</mat-card-subtitle>
+      </ng-container>
+
+      <comment-form
+      *ngIf="editComment && editComment!.id === comment.id"
+      [comment]="editComment.comment!"
+      (newInputText)="saveComment($event)"
+      ></comment-form>
+
       </mat-card-header>
 
-      <ng-container *ngIf="editComment">
-      <comment-form *ngIf="comment.id == editComment.id" (newInputText)="saveComment($event)" [comment]="editComment!" ></comment-form>
-    </ng-container>
+
+
 
     <mat-card-actions align="end">
       <mat-hint> {{comment.creationDate | date : "mediumDate" : "es-AR"}} </mat-hint>
+
       <span class="spacer"></span>
-     <ng-container *ngIf="comment.author.userId == userId">
-      <button mat-button><mat-icon (click)="sendEditComment(comment)" >edit</mat-icon></button>
+
+     <ng-container *ngIf="comment.author.uid == user.uid">
 
 
+      <button *ngIf="editComment?.id == comment.id"  mat-button (click)="sendEditComment(null)" >cancel</button>
 
-      <ng-container  *ngIf="comment.status === 'delete'; else delet">
-        <button mat-button (click)="deleteComment(comment.id)"
-        >Confirmar</button>
-    </ng-container>
+      <button   (click)="sendEditComment(comment)"
+      *ngIf="editComment?.id != comment.id" mat-button>
+      <mat-icon>edit</mat-icon>
+    </button>
 
-    <ng-template #delet>
-        <button mat-button (click)="comment.status = 'delete'" >
-      <mat-icon>delete</mat-icon></button></ng-template>
+        <button mat-button (click)="deleteComment(comment.id)">
+      <mat-icon>delete</mat-icon></button>
 
      </ng-container>
 
+     <mat-icon [matBadge]="comment.likes.length"
+      class="like"
+      [ngClass]="{'like_btn': isLiked(comment)}"
+      (click)="likeToComment(comment)"
+      matBadgeColor="primary">thumb_up</mat-icon>
+
+
+      <mat-icon matTooltip="Ver likes" (click)="viewLikes(comment.likes)"
+      >visibility</mat-icon>
+
     </mat-card-actions>
+
+
   </mat-card>
-
-    <button class="btn emitt" (click)="emittDate()">Emitir</button>
-
   </article>
+
+  <div class="modal" *ngIf="likes">
+    <div *ngFor="let item of likes" class="card">
+      <div class="spans">
+      <span class="title"> {{item.username}} </span>
+      <span class="sub_title"> {{item.name}} </span>
+    </div>
+      <img class="imageUrl" [src]="item.imageUrl">
+    </div>
+    <button mat-raised-button (click)="viewLikes(null)">Cerrar</button>
+</div>

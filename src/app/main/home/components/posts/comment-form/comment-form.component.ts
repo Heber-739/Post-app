@@ -1,6 +1,5 @@
 import { Component, Input,EventEmitter, OnInit, Output, ViewChild, ElementRef } from '@angular/core';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { Comment } from 'src/app/interfaces/comment.interface';
+import { FormControl, Validators } from '@angular/forms';
 
 @Component({
   selector: 'comment-form',
@@ -8,11 +7,15 @@ import { Comment } from 'src/app/interfaces/comment.interface';
   styleUrls: ['./comment-form.component.css']
 })
 export class CommentFormComponent implements OnInit {
-  @Input() comment!:Comment;
+  @Input() comment:string | null = null;
+
   @Output() newInputText = new EventEmitter<string>()
 
-  public addComment = new FormControl('',[Validators.required])
-  public editComment = new FormControl('',[Validators.required])
+  label:string = 'Nuevo Comentario'
+  public commentControl = new FormControl('',[Validators.required,
+    Validators.minLength(5),
+    Validators.maxLength(200),])
+
   constructor() { }
 
   ngOnInit(): void {
@@ -21,21 +24,15 @@ export class CommentFormComponent implements OnInit {
 
   private initFormField(){
     if(this.comment){
-      this.editComment.setValue(this.comment.comment)
+      this.commentControl.setValue(this.comment)
     }
   }
 
   saveComment(){
+    if(this.commentControl.invalid) return;
 
-    if(!this.comment ){
     this.newInputText.emit(
-      this.addComment.value ?? 'vacio'
-      )
-    }
-    if(this.comment){
-    }
-    this.newInputText.emit(
-      this.editComment.value ?? 'vacio'
+      this.commentControl.value!
       )
   }
 }

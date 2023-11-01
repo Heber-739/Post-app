@@ -1,25 +1,13 @@
 
 <mat-card class="list">
 
-  <mat-form-field appearance="outline" *ngIf="comment;else add" class="text_area">
-     <mat-label> {{ comment.author.name }} </mat-label>
-     <textarea matInput [formControl]="editComment"> {{ comment.comment }} </textarea>
+  <mat-form-field appearance="outline" class="container_textarea">
+     <mat-label> {{ label }} </mat-label>
+     <textarea class="textarea" matInput [formControl]="commentControl"></textarea>
    </mat-form-field>
 
- <mat-card-actions align="end" *ngIf="comment">
+ <mat-card-actions align="end">
    <button mat-button (click)="saveComment()"> Save <mat-icon>save</mat-icon> </button>
  </mat-card-actions>
 
-
- <ng-template #add>
-    <mat-form-field appearance="outline" class="text_area">
-      <mat-label> Nuevo Comentario </mat-label>
-      <textarea matInput [formControl]="addComment">  </textarea>
-    </mat-form-field>
-
- <mat-card-actions align="end">
-   <button mat-button (click)="saveComment()"> Agregar </button>
- </mat-card-actions>
-
- </ng-template>
 </mat-card>

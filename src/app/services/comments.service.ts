@@ -1,56 +1,67 @@
-import { Observable, catchError, map, tap } from 'rxjs';
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
-import { environment } from 'src/environments/environment';
-import { Comment, NewCommnet } from '../interfaces/comment.interface';
-import { Firestore, collection, getDocs, query, where } from '@angular/fire/firestore';
+import { Comment } from '../interfaces/comment.interface';
+import { DocumentReference, Firestore, addDoc, collection, deleteDoc, doc, getDocs, updateDoc } from '@angular/fire/firestore';
+import Swal from 'sweetalert2';
 
 @Injectable({
   providedIn: 'root'
 })
 export class CommentsService {
-  private url:string = environment.urlBase+environment.commentsByPostId;
-  private urlCreate:string = environment.urlBase+environment.createComment;
-  private urlDelete:string = environment.urlBase+environment.commentDelete;
-  private urlUpdate:string = environment.urlBase+environment.commentUpdate;
 
   constructor(private fire:Firestore) { }
-
 
   public getCommentsByPostId(postId:string):Promise<Comment[]>{
     return new Promise(async (resolve)=>{
       const docRef = collection(this.fire,`posts/${postId}/comments`)
       const commentsData = await getDocs(docRef)
-      const comments = commentsData.docs.map((comm)=> comm.data() as Comment)
-      resolve(comments)
+      const data = commentsData.docs.map((comm)=>{
+        let doc = comm.data() as Comment;
+        const seconds = Object.values(doc.creationDate)[0];
+         doc.creationDate = new Date(seconds * 1000)
+         return doc
+      })
+      resolve(data)
         })
   }
 
-  public createComment(create:CreateComment):Observable<NewCommnet>{
-return this.http.post<ResponseCreateComment>(this.urlCreate,create).pipe(
-  catchError((err)=>{
-    console.log(err)
-    throw new Error("Error")
-  }),
-  map((res)=>res.data))
+  public createComment(create:Comment):Promise<Comment>{
+    const dataRef = collection(this.fire,`posts/${create.idPost}/comments`)
+    return new Promise(async (resolve)=>{
+      await addDoc(dataRef,create).then((res)=>{
+        create.id= res.id;
+          this.updateComment(create)
+          resolve(create);
+        }).catch((err)=>console.log(err))
+    })
   }
 
-  public updateComment(comment:UpdateComponent):Observable<NewCommnet>{
-    return this.http.put<ResponseCreateComment>(this.urlUpdate,comment).pipe(
-      catchError((err)=>{
-        console.log(err)
-        throw new Error("Error")
-      }),
-      map((res)=>res.data),
-      )
+  public updateComment(comment:Comment):Promise<void>{
+    return new Promise(async (resolve)=>{
+        const docPost =  doc(this.fire,`posts/${comment.idPost}/comments/${comment.id}`) as DocumentReference<Comment>;
+        await updateDoc(docPost,comment).then(()=>{
+          resolve()
+        })
+      })
       }
 
-  public deleteComment(id:DeleteComment):Observable<NewCommnet>{
-    return this.http.post<any>(this.urlDelete,id).pipe(
-      catchError((err)=>{
-        console.log(err)
-        throw new Error("Error")
-      }))
+  public deleteComment(id:string,idPost:string):Promise<boolean>{
+    return new Promise((resolve)=>{
+      Swal.fire({
+        title: 'Eliminar comentario?',
+        showCancelButton: true,
+        confirmButtonText: 'Eliminar',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          const placeDocRef = doc(this.fire, `posts/${idPost}/comments/${id}`);
+          deleteDoc(placeDocRef).then(()=>{
+            Swal.fire('Post eliminado!', '', 'success')
+            resolve(true)
+          })
+        }else{
+          resolve(false)
+        }
+      })
+    })
       }
 
 
